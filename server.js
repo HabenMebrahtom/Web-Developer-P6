@@ -15,7 +15,7 @@ app.use('/', express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json());
 
 
-app.use('/api', userRouter)
+app.use('/api/auth', userRouter)
 
 const connectionParams={
     useNewUrlParser: true,
