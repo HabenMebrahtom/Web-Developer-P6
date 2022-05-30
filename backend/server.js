@@ -5,6 +5,17 @@ const mongoose = require('mongoose');
 require('dotenv/config')
 
 const url = process.env.DB_CONNECTION;
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+const userRouter = require('./routers/user')
+
+
+app.use('/', express.static(path.join(__dirname, 'static')));
+app.use(bodyParser.json());
+
+
+app.use('/api/auth', userRouter)
 
 const connectionParams={
     useNewUrlParser: true,
@@ -19,13 +30,7 @@ mongoose.connect(url,connectionParams)
     })
 
 
-const app = express();
-const PORT = process.env.PORT || 3000;
 
-
-
-app.use('/', express.static(path.join(__dirname, 'static')));
-app.use(bodyParser.json());
 
 app.listen(PORT, () => {
     console.log(`The server is listening on port: ${PORT}`);
