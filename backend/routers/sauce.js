@@ -6,11 +6,11 @@ const auth = require('../middleware/auth')
 const sauceControllers = require('../controllers/sauce');
 
 
-sauceRouter.get('/', sauceControllers)
-sauceRouter.get('/:id', sauceControllers);
-sauceRouter.post('/', sauceControllers);
-sauceRouter.put('/:id', sauceControllers);
-sauceRouter.delete('/:id', sauceControllers);
-sauceRouter.post('/:id/like', sauceControllers);
+sauceRouter.get('/', sauceControllers.getAllSauces)
+sauceRouter.get('/:id', sauceControllers.getSingleSauce);
+//sauceRouter.post('/', sauceControllers);
+//sauceRouter.put('/:id', sauceControllers);
+//sauceRouter.delete('/:id', sauceControllers);
+//sauceRouter.post('/:id/like', sauceControllers);
 
-module.exports = userRouter;
+module.exports = sauceRouter;

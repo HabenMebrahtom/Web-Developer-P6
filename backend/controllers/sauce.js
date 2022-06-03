@@ -1,7 +1,7 @@
 const Sauce = require('../model/sauce');
 
 
-
+// get all sauces
 exports.getAllSauces = async(req, res) => {
     try {
         const sauce = await Sauce.find();
@@ -11,6 +11,7 @@ exports.getAllSauces = async(req, res) => {
     }
 }
 
+//get a single sauce
 exports.getSingleSauce= async(req, res) => {
     try {
         const sauce = await Sauce.findById(req.params.id);
