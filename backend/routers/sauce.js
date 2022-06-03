@@ -1,6 +1,16 @@
 const express = require('express');
 const sauceRouter = express.Router();
+const auth = require('../middleware/auth')
 
 
+const sauceControllers = require('../controllers/sauce');
 
-module.exports = sauceRouter;
+
+sauceRouter.get('/', sauceControllers)
+sauceRouter.get('/:id', sauceControllers);
+sauceRouter.post('/', sauceControllers);
+sauceRouter.put('/:id', sauceControllers);
+sauceRouter.delete('/:id', sauceControllers);
+sauceRouter.post('/:id/like', sauceControllers);
+
+module.exports = userRouter;
