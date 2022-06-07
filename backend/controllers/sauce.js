@@ -20,3 +20,14 @@ exports.getSingleSauce= async(req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+
+// Upload the file
+
+exports.singleFileUpload = async (req, res, next) => {
+    try {
+        const file = req.file;
+    } catch (error) {
+        res.status(500).json({ message: error.message})
+    }
+}
