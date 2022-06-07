@@ -75,14 +75,4 @@ exports.loginUser = async (req, res) => {
 
 }
 
-exports.getUserProfile = async (req, res) => {
-    
-    const { email} = req.body;
 
-    const user = await User.findOne({ email });
-    if (user) {
-        res.status(200).json(user)
-    } else {
-        res.status(400).send('User not found, Please sign up!')
-    }
-}
