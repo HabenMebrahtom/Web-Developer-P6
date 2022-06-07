@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser')
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -8,11 +9,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const userRouter = require('./routers/user');
-const sauceRouter = require('./routers/sauce')
+const sauceRouter = require('./routers/sauce');
+
 
 
 app.use('/', express.static(path.join(__dirname, 'static')));
 app.use(express.json());
+app.use(bodyParser.json())
 
 
 app.use('/api/auth', userRouter);
@@ -24,10 +27,10 @@ const connectionParams={
 }
 mongoose.connect(url, connectionParams)
     .then( () => {
-        console.log('Connected to the database ')
+        console.log('Connected to the DB')
     })
     .catch( (err) => {
-        console.error(`Error connecting to the database. n${err}`);
+        console.error(`Error connecting to the database. ${err}`);
     })
 
 
