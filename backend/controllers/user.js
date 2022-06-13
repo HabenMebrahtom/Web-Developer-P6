@@ -1,10 +1,10 @@
-const User = require('../model/user');
+const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv/config');
 
 
-exports.registerUser = async (req, res) => { 
+exports.registerUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -34,7 +34,7 @@ exports.registerUser = async (req, res) => {
             }
         );
 
-        user.token = token; 
+        user.token = token;
 
         res.send(user)
     } catch (error) {
@@ -63,14 +63,14 @@ exports.loginUser = async (req, res) => {
                     expiresIn: "2h"
                 }
             );
-            
+
             user.token = token;
             res.status(200).json(user)
         }
 
         res.status(400).json('Invalid Credentilas')
      } catch (error) {
-        
+
     }
 
 }
