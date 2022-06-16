@@ -12,6 +12,6 @@ sauceRouter.get('/:id', auth, sauceControllers.getSingleSauce);
 sauceRouter.post('/', auth, upload, sauceControllers.createSauce);
 sauceRouter.put('/:id', auth, upload, sauceControllers.modifySauce);
 sauceRouter.delete('/:id', auth, sauceControllers.deleteSauce);
-sauceRouter.post('/:id/like', auth,  sauceControllers.createLikes);
+sauceRouter.post('/:id/like', auth,  sauceControllers.createLikesAndDislikes);
 
 module.exports = sauceRouter;

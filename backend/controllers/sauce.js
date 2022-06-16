@@ -58,7 +58,7 @@ exports.modifySauce = async (req, res) => {
   let sauce = new Sauce({ _id: req.params._id });
   if (req.file) {
       const url = req.protocol + '://' + 'localhost:3000';
-      req.body.sauce = JSON.parse(req.body.sauce);
+     req.body.sauce = JSON.stringify(req.body.sauce);
     sauce = {
           _id: req.params.id,
           userId: userId,
@@ -114,6 +114,30 @@ exports.deleteSauce = async(req, res, next) => {
 
 
 
-exports.createLikes = async (req, res, next) => {
+exports.createLikesAndDislikes = async (req, res, next) => {
+
+  const  userID = req.body.userId;
+  const likeStatus = req.body.likes
+
+  if (likeStatus === 1) {
+      Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: +1 }, $push: { usersLiked: userID } })
+      .then(() => res.status(201).json({ message: "Like has been added" }))
+      .catch(error => res.status(400).json(error));
+  }
+
+  if (likeStatus === 0) {
+    Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: -1 }, $pull: { usersLiked: userID } })
+      .then(() => {
+        return Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: +1}, $pull: { usersDisliked: userID } })
+      })
+      .then(() => res.status(201).json({ message: "Like has been canceled, and dislike has been added" }))
+    .catch(error => res.status(400).json(error))
+  }
+
+  if (likeStatus === -1) {
+      Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: -1 }, $push: { usersDisliked: userID } })
+      .then(() => res.status(201).json({ message: "Dislike has been added" }))
+      .catch(error => res.status(400).json(error));
+  }
 
 }

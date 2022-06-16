@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
         cb(null, 'images')
     },
     filename: function (req, file, cb) {
-        cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname)
+        cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname.split(' ').join('-'))
     }
 });
 
@@ -19,6 +19,6 @@ const filefilter = (req, file, cb) => {
     }
 }
 
-const upload = multer({ storage: storage, fileFilter: filefilter }).single('image');
+const upload = multer({ storage: storage, fileFilter: filefilter });
 
-module.exports = upload;
+module.exports = upload.single('imageUrl');

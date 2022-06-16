@@ -13,7 +13,6 @@ const userRouter = require('./routers/user');
 const sauceRouter = require('./routers/sauce');
 
 
-
 app.use('/', express.static(path.join(__dirname, 'static')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.json());
@@ -22,7 +21,7 @@ app.use(cors());
 
 
 app.use('/api/auth', userRouter);
-app.use('/api/sauces', sauceRouter)
+app.use('/api/sauces', sauceRouter);
 
 const connectionParams={
     useNewUrlParser: true,
