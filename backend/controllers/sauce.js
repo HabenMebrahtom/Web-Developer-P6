@@ -36,7 +36,7 @@ exports.createSauce = async (req, res, next) => {
         manufacturer: manufacturer,
         description: description,
         mainPepper: mainPepper,
-        imageUrl: url + '/images/' + req.file.filename,
+        image: url + '/images/' + req.file.filename,
         heat: heat,
         likes: 0,
         dislikes: 0,
@@ -54,7 +54,7 @@ exports.createSauce = async (req, res, next) => {
 
 
 exports.modifySauce = async (req, res) => {
-  const { userId, name, manufacturer, description, mainPepper, imageUrl, heat } = req.body;
+  const { userId, name, manufacturer, description, mainPepper, image, heat } = req.body;
   let sauce = new Sauce({ _id: req.params._id });
   if (req.file) {
       const url = req.protocol + '://' + 'localhost:3000';
@@ -66,7 +66,7 @@ exports.modifySauce = async (req, res) => {
           manufacturer: manufacturer,
           description: description,
           mainPepper: mainPepper,
-          imageUrl: url + '/images/' + req.file.filename,
+          image: url + '/images/' + req.file.filename,
           heat: heat,
           likes: 0,
           dislikes: 0,
@@ -81,7 +81,7 @@ exports.modifySauce = async (req, res) => {
           manufacturer: manufacturer,
           description: description,
           mainPepper: mainPepper,
-          imageUrl: imageUrl,
+          image: image,
           heat: heat,
           likes: 0,
           dislikes: 0,
@@ -130,7 +130,7 @@ exports.createLikesAndDislikes = async (req, res, next) => {
       .then(() => {
         return Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: +1}, $pull: { usersDisliked: userID } })
       })
-      .then(() => res.status(201).json({ message: "Like has been canceled, and dislike has been added" }))
+      .then(() => res.status(201).json({ message: [ "Like has been canceled", "dislike has been added"] }))
     .catch(error => res.status(400).json(error))
   }
 
