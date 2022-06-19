@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser')
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -16,13 +15,14 @@ const sauceRouter = require('./routers/sauce');
 app.use('/', express.static(path.join(__dirname, 'static')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.json());
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-
+//Routers
 app.use('/api/auth', userRouter);
 app.use('/api/sauces', sauceRouter);
 
+//connecting to the mongodb
 const connectionParams={
     useNewUrlParser: true,
     useUnifiedTopology: true

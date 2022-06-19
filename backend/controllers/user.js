@@ -64,8 +64,13 @@ exports.loginUser = async (req, res) => {
                 }
             );
 
-            user.token = token;
-            res.status(200).json(user)
+          user.token = token;
+          const dataRes = {
+              userId: (user._id).toString(),
+              token: user.token
+             }
+
+            res.status(200).json(dataRes)
         }
 
         res.status(400).json('Invalid Credentilas')

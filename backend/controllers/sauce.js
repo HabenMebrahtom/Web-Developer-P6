@@ -1,4 +1,3 @@
-const ids = require('short-id')
 const Sauce = require('../models/sauce');
 
 
@@ -25,23 +24,23 @@ exports.getSingleSauce= async(req, res) => {
 
 // Upload the file
 
-exports.createSauce = async (req, res, next) => {
+exports.createSauce = async (req, res) => {
 
-      const { name, manufacturer, description, mainPepper, heat } = req.body;
+      const { name, manufacturer, description, mainPepper, userId, heat } = JSON.parse(req.body.sauce);
       const url = req.protocol + '://' + 'localhost:3000';
 
       const sauce = new Sauce({
-        userId: ids.generate(),
+        userId: userId,
         name: name,
         manufacturer: manufacturer,
         description: description,
         mainPepper: mainPepper,
-        image: url + '/images/' + req.file.filename,
+        imageUrl: url + '/images/' + req.file.filename,
         heat: heat,
         likes: 0,
         dislikes: 0,
-        usersLikes: [],
-        usersDislikes: []
+        usersLiked: [],
+        usersDisliked: []
       });
 
     try {
@@ -52,13 +51,13 @@ exports.createSauce = async (req, res, next) => {
     }
 }
 
-
+//Updating the file
 exports.modifySauce = async (req, res) => {
-  const { userId, name, manufacturer, description, mainPepper, image, heat } = req.body;
+  const { userId, name, manufacturer, description, mainPepper, imageUrl, heat } = req.body;
   let sauce = new Sauce({ _id: req.params._id });
   if (req.file) {
       const url = req.protocol + '://' + 'localhost:3000';
-     req.body.sauce = JSON.stringify(req.body.sauce);
+     req.body.sauce = JSON.parse(req.body.sauce);
     sauce = {
           _id: req.params.id,
           userId: userId,
@@ -66,12 +65,12 @@ exports.modifySauce = async (req, res) => {
           manufacturer: manufacturer,
           description: description,
           mainPepper: mainPepper,
-          image: url + '/images/' + req.file.filename,
+          imageUrl: url + '/images/' + req.file.filename,
           heat: heat,
           likes: 0,
           dislikes: 0,
-          usersLikes: [],
-          usersDislikes: []
+          usersLiked: [],
+          usersDisliked: []
     }
       } else {
       sauce = {
@@ -81,17 +80,15 @@ exports.modifySauce = async (req, res) => {
           manufacturer: manufacturer,
           description: description,
           mainPepper: mainPepper,
-          image: image,
+          imageUrl: imageUrl,
           heat: heat,
           likes: 0,
           dislikes: 0,
-          usersLikes: [],
-          usersDislikes: []
+          usersLiked: [],
+          usersDisliked: []
 
          }
   }
-
-
   try {
     const updatedSauce = await Sauce.updateOne({ _id: req.params.id }, sauce);
     res.status(200).json(updatedSauce)
@@ -100,7 +97,7 @@ exports.modifySauce = async (req, res) => {
   }
 };
 
-
+//Deleting the sauce
 
 exports.deleteSauce = async(req, res, next) => {
   const { id } = req.params;
@@ -112,30 +109,28 @@ exports.deleteSauce = async(req, res, next) => {
   }
 }
 
+//Adding like and dislike
+exports.likesAndDislikes = async (req, res) => {
+  let { userId } = req.body;
+  let { like } = req.body;
 
-
-exports.createLikesAndDislikes = async (req, res, next) => {
-
-  const  userID = req.body.userId;
-  const likeStatus = req.body.likes
-
-  if (likeStatus === 1) {
-      Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: +1 }, $push: { usersLiked: userID } })
+  if (like === 1) {
+      Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: +1 }, $push: { usersLiked: userId } })
       .then(() => res.status(201).json({ message: "Like has been added" }))
       .catch(error => res.status(400).json(error));
   }
 
-  if (likeStatus === 0) {
-    Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: -1 }, $pull: { usersLiked: userID } })
+  if (like === 0) {
+    Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: -1 }, $pull: { usersLiked: userId } })
       .then(() => {
-        return Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: +1}, $pull: { usersDisliked: userID } })
+        return Sauce.updateOne({_id: req.params.id}, { $inc: {dislikes: +1}, $pull: { usersDisliked: userId } })
       })
       .then(() => res.status(201).json({ message: [ "Like has been canceled", "dislike has been added"] }))
     .catch(error => res.status(400).json(error))
   }
 
-  if (likeStatus === -1) {
-      Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: -1 }, $push: { usersDisliked: userID } })
+  if (like === -1) {
+      Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: -1 }, $push: { usersDisliked: userId } })
       .then(() => res.status(201).json({ message: "Dislike has been added" }))
       .catch(error => res.status(400).json(error));
   }
