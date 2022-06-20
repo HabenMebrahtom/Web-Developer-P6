@@ -2,9 +2,8 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv/config');
+require('dotenv').config();
 
-const url = process.env.DB_CONNECTION;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -23,6 +22,8 @@ app.use('/api/auth', userRouter);
 app.use('/api/sauces', sauceRouter);
 
 //connecting to the mongodb
+const url = process.env.DB_CONNECTION;
+
 const connectionParams={
     useNewUrlParser: true,
     useUnifiedTopology: true
