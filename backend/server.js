@@ -40,6 +40,6 @@ mongoose.connect(url, connectionParams)
 
 
 
-https.createServer(app).listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`The server is listening on port: ${PORT}`);
 });
