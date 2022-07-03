@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const fs = require('fs');
+const https = require('https')
 require('dotenv').config();
 
 const app = express();
@@ -36,6 +38,8 @@ mongoose.connect(url, connectionParams)
         console.error(`Error connecting to the database. ${err}`);
     })
 
-app.listen(PORT, () => {
+
+
+https.createServer(app).listen(PORT, () => {
     console.log(`The server is listening on port: ${PORT}`);
 });
